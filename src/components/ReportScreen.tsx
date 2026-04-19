@@ -27,19 +27,18 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
   const reportRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let timeoutId: number;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Use a simple check to avoid state spam
-            if (activeSection !== entry.target.id) {
-              setActiveSection(entry.target.id);
-            }
+            setActiveSection(prev => {
+              if (prev !== entry.target.id) return entry.target.id;
+              return prev;
+            });
           }
         });
       },
-      { threshold: 0.3 } // Lower threshold for smoother perception
+      { threshold: 0.3 }
     );
 
     SECTIONS.forEach((section) => {
