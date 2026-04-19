@@ -50,12 +50,20 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
     const element = reportRef.current;
     if (!element) return;
 
+    // Add a loading state if needed, but for now just trigger
     const opt = {
-      margin: [15, 15, 15, 15] as [number, number, number, number],
-      filename: `${data.topic.replace(/\s+/g, '_')}_Research_Report.pdf`,
-      image: { type: 'jpeg' as const, quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-      jsPDF: { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const }
+      margin: [10, 10, 10, 10] as [number, number, number, number],
+      filename: `${data.topic.replace(/\s+/g, '_')}_Market_Report.pdf`,
+      image: { type: 'jpeg' as const, quality: 1.0 },
+      html2canvas: { 
+        scale: 2, 
+        useCORS: true, 
+        letterRendering: true,
+        scrollY: 0,
+        windowWidth: 1200 
+      },
+      jsPDF: { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
     };
 
     html2pdf().set(opt).from(element).save();
@@ -255,12 +263,14 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
             </section>
 
             {/* Section 7 - SWOT */}
+            <div className="html2pdf__page-break"></div>
             <section id="swot" className="scroll-mt-12 space-y-8">
               <h2 className="text-2xl font-medium tracking-tight border-b-[0.5px] border-border-color pb-4">SWOT Analysis</h2>
               <SwotGrid swot={data.report.swot} />
             </section>
 
             {/* Section 8 - Key Takeaways */}
+            <div className="html2pdf__page-break"></div>
             <section id="key_takeaways" className="scroll-mt-12 space-y-8">
               <h2 className="text-2xl font-medium tracking-tight border-b-[0.5px] border-border-color pb-4">Strategic Key Takeaways</h2>
               <div className="grid gap-6">
