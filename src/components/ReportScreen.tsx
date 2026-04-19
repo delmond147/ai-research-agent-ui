@@ -218,14 +218,26 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
             <section id="key_takeaways" className="scroll-mt-12 space-y-8">
               <h2 className="text-2xl font-medium text-text-primary border-b border-border-color pb-4">Key Takeaways</h2>
               <div className="grid gap-6">
-                {(data.report?.key_takeaways || "").split(/[•\-\n\.]/).filter(t => t.trim().length > 10).slice(0, 4).map((text, i) => (
-                  <div key={i} className="flex gap-6 bg-surface border border-border-color p-8 rounded-xl">
-                    <div className="w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-bold">
-                      {i + 1}
-                    </div>
-                    <p className="flex-1 text-sm text-text-muted leading-relaxed">{text.trim()}</p>
-                  </div>
-                ))}
+                {(() => {
+                  const raw = data.report?.key_takeaways;
+                  const takeaways = Array.isArray(raw) 
+                    ? raw 
+                    : (typeof raw === 'string' ? raw.split(/[•\-\n\.]/) : []);
+                  
+                  return takeaways
+                    .filter(t => t && t.trim().length > 10)
+                    .map(t => t.trim())
+                    .filter((value, index, self) => self.indexOf(value) === index) // Unique
+                    .slice(0, 4)
+                    .map((text, i) => (
+                      <div key={i} className="flex gap-6 bg-surface border border-border-color p-8 rounded-xl">
+                        <div className="w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-bold">
+                          {i + 1}
+                        </div>
+                        <p className="flex-1 text-sm text-text-muted leading-relaxed">{text}</p>
+                      </div>
+                    ));
+                })()}
               </div>
             </section>
           </div>
