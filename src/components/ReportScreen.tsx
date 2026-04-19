@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import type { ResearchResponse } from '../services/researchService';
 import { ChartRenderer } from './ChartRenderer';
 import SwotGrid from './SwotGrid';
-import { Download, Link as LinkIcon, ArrowLeft, Building2, Users2, MapPin, Briefcase } from 'lucide-react';
+import { Download, Link as LinkIcon, ArrowLeft } from 'lucide-react';
 // @ts-ignore
 import html2pdf from 'html2pdf.js';
 
@@ -58,12 +58,12 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
       margin: [10, 10, 10, 10] as [number, number, number, number],
       filename: `${data.topic.replace(/\s+/g, '_')}_Market_Report.pdf`,
       image: { type: 'jpeg' as const, quality: 1.0 },
-      html2canvas: { 
-        scale: 2, 
-        useCORS: true, 
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
         letterRendering: true,
         scrollY: 0,
-        windowWidth: 1200 
+        windowWidth: 1200
       },
       jsPDF: { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const },
       pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
@@ -181,20 +181,6 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
               <div className="text-text-muted" style={{ lineHeight: '1.6', fontSize: '0.925rem' }}>
                 {data.report.overview}
               </div>
-              <div className="flex flex-wrap gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))' }}>
-                {[
-                  { label: 'Market Stage', value: 'Growth', icon: Building2 },
-                  { label: 'CAGR', value: '14.2%', icon: Users2 },
-                  { label: 'TAM', value: '$24.5B', icon: MapPin },
-                  { label: 'Reg. Status', value: 'Moderate', icon: Briefcase },
-                ].map((stat, i) => (
-                  <div key={i} className="bg-surface card p-4 space-y-2">
-                    <stat.icon size={16} className="text-text-muted" />
-                    <div className="text-xs uppercase tracking-widest text-text-muted font-semibold" style={{ fontSize: '10px' }}>{stat.label}</div>
-                    <div className="text-lg font-medium text-text-primary">{stat.value}</div>
-                  </div>
-                ))}
-              </div>
             </section>
 
             {/* Section 3 - Target Market */}
@@ -216,29 +202,15 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
                 {data.report.competitors}
               </div>
               <div className="grid lg:grid-cols-2 gap-8">
-                <div className="bg-surface border-[0.5px] border-border-color p-8 rounded-xl" style={{ height: '260px', position: 'relative', overflow: 'hidden' }}>
-                  <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Market Positioning</div>
+                <div className="bg-surface border-[0.5px] border-border-color p-8 rounded-xl" style={{ height: '320px', position: 'relative', overflow: 'hidden' }}>
+                  <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Competitive Positioning Strategy</div>
                   <ChartRenderer type="radar" data={data.charts.competitive_radar} />
                 </div>
-                <div className="bg-surface card" style={{ overflow: 'hidden' }}>
-                  <table className="w-full text-left" style={{ fontSize: '12px', borderCollapse: 'collapse' }}>
-                    <thead className="bg-bg-primary">
-                      <tr>
-                        <th className="p-4 font-semibold uppercase tracking-wider" style={{ borderBottom: '0.5px solid var(--border-color)' }}>Competitor</th>
-                        <th className="p-4 font-semibold uppercase tracking-wider" style={{ borderBottom: '0.5px solid var(--border-color)' }}>Strength</th>
-                        <th className="p-4 font-semibold uppercase tracking-wider" style={{ borderBottom: '0.5px solid var(--border-color)' }}>Weakness</th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-text-muted">
-                      {['Market Leader', 'Aggressive Challenger', 'Niche Player'].map((_, i) => (
-                        <tr key={i} style={{ borderBottom: '0.5px solid var(--border-color)' }}>
-                          <td className="p-4 font-medium text-text-primary">Competitor {i + 1}</td>
-                          <td className="p-4">Brand Presence</td>
-                          <td className="p-4">Innovation Lag</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div className="bg-surface card p-8 space-y-4">
+                  <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold">Strategic Landscape Summary</div>
+                  <div className="text-sm text-text-muted leading-relaxed prose prose-sm max-w-none">
+                    {data.report.competitors}
+                  </div>
                 </div>
               </div>
             </section>
@@ -279,15 +251,15 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
             <section id="key_takeaways" className="scroll-mt-12 space-y-8">
               <h2 className="text-2xl font-medium tracking-tight border-b-[0.5px] border-border-color pb-4">Strategic Key Takeaways</h2>
               <div className="grid gap-6">
-                {[1, 2, 3].map((num) => (
-                  <div key={num} className="flex space-x-6 bg-surface border-[0.5px] border-border-color p-8 rounded-xl group hover:border-text-muted transition-all">
+                {(data.report.key_takeaways.split(/[•\-\n\.]/).filter(t => t.trim().length > 10)).slice(0, 4).map((text, i) => (
+                  <div key={i} className="flex space-x-6 bg-surface border-[0.5px] border-border-color p-8 rounded-xl group hover:border-text-muted transition-all">
                     <div className="flex-shrink-0 w-12 h-12 rounded-full border-[0.5px] border-border-color flex items-center justify-center text-xl font-medium group-hover:bg-accent group-hover:text-white transition-all">
-                      {num}
+                      {i + 1}
                     </div>
                     <div className="space-y-1">
-                      <div className="text-sm font-medium text-text-primary">Strategic Priority 0{num}</div>
+                      <div className="text-sm font-medium text-text-primary">Strategic Insight 0{i + 1}</div>
                       <p className="text-sm text-text-muted leading-relaxed">
-                        Implement high-level strategic integration of AI-driven tools to enhance market efficiency and drive customer engagement across all vertical segments.
+                        {text.trim()}
                       </p>
                     </div>
                   </div>
