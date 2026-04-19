@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import type { ResearchResponse } from '../services/researchService';
-import { ChartRenderer } from './ChartRenderer';
-import SwotGrid from './SwotGrid';
+import type { ResearchResponse } from '../services/researchService.ts';
+import { ChartRenderer } from './ChartRenderer.tsx';
+import SwotGrid from './SwotGrid.tsx';
 import { Download, Link as LinkIcon, ArrowLeft } from 'lucide-react';
 // @ts-ignore
 import html2pdf from 'html2pdf.js';
@@ -25,6 +25,21 @@ const SECTIONS = [
 const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
   const [activeSection, setActiveSection] = useState(SECTIONS[0].id);
   const reportRef = useRef<HTMLDivElement>(null);
+
+  // Safety guard: If data structure is invalid, show graceful error instead of crashing
+  if (!data || !data.report) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-6 text-center space-y-6">
+        <div className="text-4xl">⚠️</div>
+        <h1 className="text-2xl font-medium text-text-primary">Unable to display report</h1>
+        <p className="text-text-muted max-w-md">There was an issue processing the research data. Please try generating a new report.</p>
+        <button onClick={onReset} className="button-primary flex items-center space-x-2">
+          <ArrowLeft size={18} />
+          <span>Research another topic</span>
+        </button>
+      </div>
+    );
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -141,7 +156,9 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
                 <div className="flex flex-wrap items-center gap-4 text-xs text-text-muted font-medium">
                   <span className="bg-surface card" style={{ padding: '4px 8px' }}>ID: {Math.random().toString(36).substr(2, 9).toUpperCase()}</span>
                   <span>•</span>
-                  <span>{new Date(data.generated_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                  <span>{data.generated_at && !isNaN(new Date(data.generated_at).getTime()) 
+                    ? new Date(data.generated_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) 
+                    : new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                   <span>•</span>
                   <span>{data.sources_count} Reliable Sources</span>
                 </div>
