@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import type { ResearchResponse } from '../services/researchService';
 import { ChartRenderer } from './ChartRenderer';
 import SwotGrid from './SwotGrid';
-import { Download, Link, ArrowLeft } from 'lucide-react';
+import { Download, Share2, ArrowLeft, Sparkles, Clock, Globe, Target, TrendingUp, Briefcase, ListChecks } from 'lucide-react';
 // @ts-ignore
 import html2pdf from 'html2pdf.js';
 
@@ -12,14 +12,14 @@ interface ReportScreenProps {
 }
 
 const SECTIONS = [
-  { id: 'executive_summary', label: 'Executive Summary' },
-  { id: 'overview', label: 'Market Overview' },
-  { id: 'target_market', label: 'Target Market' },
-  { id: 'competitors', label: 'Competitive Landscape' },
-  { id: 'trends', label: 'Market Trends' },
-  { id: 'business_model', label: 'Business Model' },
-  { id: 'swot', label: 'SWOT Analysis' },
-  { id: 'key_takeaways', label: 'Key Takeaways' },
+  { id: 'executive_summary', label: 'Executive Summary', icon: ListChecks },
+  { id: 'overview', label: 'Market Overview', icon: Globe },
+  { id: 'target_market', label: 'Target Market', icon: Target },
+  { id: 'competitors', label: 'Competitive Landscape', icon: Briefcase },
+  { id: 'trends', label: 'Market Trends', icon: TrendingUp },
+  { id: 'business_model', label: 'Business Model', icon: Briefcase },
+  { id: 'swot', label: 'SWOT Analysis', icon: Sparkles },
+  { id: 'key_takeaways', label: 'Key Takeaways', icon: ListChecks },
 ];
 
 const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
@@ -88,81 +88,116 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
   }) : new Date().toLocaleDateString();
 
   return (
-    <div className="flex bg-bg-primary min-h-screen">
+    <div className="flex bg-bg-primary min-h-screen text-text-primary">
       {/* Sidebar Navigation */}
-      <aside className="sidebar-fixed glass hidden lg:block p-8 overflow-y-auto no-print">
-        <div className="space-y-12">
-          <button onClick={onReset} className="flex items-center space-x-2 text-xs font-bold text-text-muted hover:text-accent transition-all uppercase tracking-widest border-none bg-none cursor-pointer">
-            <ArrowLeft size={14} />
+      <aside className="sidebar-fixed glass no-print hidden lg:flex">
+        {/* Sidebar Header: Branding */}
+        <div className="p-8 border-b border-border-color">
+          <div className="flex items-center space-x-2 mb-8">
+            <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center text-white shadow-lg shadow-accent/20">
+              <Sparkles size={22} strokeWidth={2.5} />
+            </div>
+            <div>
+              <h2 className="text-sm font-bold tracking-tight uppercase">MarketInsight</h2>
+              <p className="text-[10px] text-text-muted font-medium uppercase tracking-[0.2em] opacity-60">Intelligence Hub</p>
+            </div>
+          </div>
+
+          <button 
+            onClick={onReset} 
+            className="group flex items-center space-x-2 text-[10px] font-bold text-text-muted hover:text-accent transition-all uppercase tracking-widest border-none bg-none cursor-pointer p-0"
+          >
+            <ArrowLeft size={12} className="group-hover:-translate-x-1 transition-transform" />
             <span>New Research</span>
           </button>
-          
-          <div className="space-y-6">
-            <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold opacity-50">Report Structure</div>
-            <nav className="flex flex-col space-y-4">
+        </div>
+
+        {/* Sidebar Content: Navigation & Info */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-8">
+          <div>
+            <div className="px-4 mb-4">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-text-muted font-bold opacity-40">Active Analysis</span>
+              <h3 className="text-xs font-bold mt-1 text-text-primary line-clamp-2">{data.topic}</h3>
+            </div>
+            <nav className="space-y-1">
               {SECTIONS.map((section) => (
                 <a
                   key={section.id}
                   href={`#${section.id}`}
-                  className={`text-sm transition-all no-underline ${
-                    activeSection === section.id 
-                    ? 'text-text-primary font-bold border-l-2 border-accent pl-4' 
-                    : 'text-text-muted border-l-2 border-transparent pl-4 hover:text-text-primary'
-                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className={`sidebar-nav-item ${activeSection === section.id ? 'active' : ''}`}
                 >
-                  {section.label}
+                  <section.icon size={16} className="mr-3 opacity-70" />
+                  <span>{section.label}</span>
                 </a>
               ))}
             </nav>
           </div>
 
-          <div className="pt-8 border-t border-border-color">
-             <button
-                onClick={handleDownloadPDF}
-                className="w-full flex items-center justify-center space-x-2 button-primary py-3"
-              >
-                <Download size={16} />
-                <span>Export PDF</span>
-              </button>
+          {/* Quick Stats Block */}
+          <div className="px-4 pt-4 border-t border-border-color/50">
+            <div className="flex items-center space-x-3 text-text-muted">
+              <Clock size={14} className="opacity-50" />
+              <span className="text-[10px] uppercase tracking-wider font-medium">{dateStr}</span>
+            </div>
+            <div className="flex items-center space-x-3 text-text-muted mt-2">
+              <ListChecks size={14} className="opacity-50" />
+              <span className="text-[10px] uppercase tracking-wider font-medium">{data.sources_count || 0} Sources Verified</span>
+            </div>
           </div>
+        </div>
+
+        {/* Sidebar Footer: Actions */}
+        <div className="p-6 border-t border-border-color space-y-3">
+          <button 
+            onClick={handleDownloadPDF}
+            className="w-full flex items-center justify-center space-x-2 button-primary py-3 text-xs font-bold uppercase tracking-wider"
+          >
+            <Download size={14} />
+            <span>Export Report</span>
+          </button>
+          <button 
+            onClick={copyLink}
+            className="w-full flex items-center justify-center space-x-2 py-3 text-xs font-bold uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors border border-border-color rounded-lg hover:bg-surface"
+          >
+            <Share2 size={14} />
+            <span>Share Link</span>
+          </button>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 main-content-offset py-12 px-6 lg:px-16">
-        <div className="max-w-4xl mx-auto space-y-20" ref={reportRef}>
-          {/* McKinsey-grade Header */}
-          <header className="space-y-8 pb-12 border-b border-border-color">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+      <main className="main-content-offset min-h-screen">
+        {/* Transparent Header for Mobile or context */}
+        <header className="sticky top-0 z-30 no-print glass border-b border-border-color/10 lg:hidden px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Sparkles size={18} className="text-accent" />
+            <h1 className="text-sm font-bold uppercase tracking-tight">MarketInsight</h1>
+          </div>
+          <button onClick={onReset} className="text-text-muted hover:text-accent">
+            <ArrowLeft size={20} />
+          </button>
+        </header>
+
+        {/* Report Content Container */}
+        <div className="max-w-5xl mx-auto px-6 py-12 lg:px-20 lg:py-24">
+          <article ref={reportRef} className="space-y-24 bg-transparent animate-fade-in">
+            {/* Report Header */}
+            <header className="space-y-10 border-b border-border-color/20 pb-16">
               <div className="space-y-4">
-                <div className="flex items-center space-x-2 text-xs uppercase tracking-widest font-bold text-text-muted">
-                  <span className="text-accent">Market Insight</span>
-                  <span>/</span>
-                  <span className="text-text-primary">{data.topic}</span>
-                </div>
-                <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-text-primary capitalize">
-                  {data.topic} Strategic Analysis
+                <nav className="flex items-center space-x-2 text-[10px] font-bold uppercase tracking-[0.3em] text-text-muted opacity-60">
+                  <span>Market Insight</span>
+                  <span className="opacity-30">/</span>
+                  <span className="text-accent">Strategic Analysis</span>
+                </nav>
+                <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-text-primary leading-[1.05]">
+                  {data.topic}
                 </h1>
-                <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-text-muted">
-                  <span className="bg-surface border border-border-color px-3 py-1 rounded-full">Proprietary Intel</span>
-                  <span>•</span>
-                  <span>{dateStr}</span>
-                  <span>•</span>
-                  <span>{data.sources_count || 0} Sources Verified</span>
-                </div>
               </div>
-              
-              <div className="flex items-center space-x-3 no-print">
-                <button
-                  onClick={copyLink}
-                  className="bg-surface border border-border-color p-3 rounded-xl hover:bg-bg-primary transition-all shadow-sm"
-                  title="Copy Link"
-                >
-                  <Link size={18} />
-                </button>
-              </div>
-            </div>
-          </header>
+            </header>
 
           <div className="space-y-24">
             {/* Executive Summary as a Premium Callout */}
@@ -257,16 +292,17 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
               </div>
             </section>
           </div>
+        </article>
+      </div>
 
-          <footer className="pt-16 border-t border-border-color text-center no-print pb-24">
+      <footer className="pt-16 border-t border-border-color text-center no-print pb-24">
             <button onClick={onReset} className="button-primary flex items-center space-x-3 mx-auto px-8 py-4 text-base shadow-xl">
               <ArrowLeft size={20} />
               <span>Start New Analysis</span>
             </button>
           </footer>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
   );
 };
 
