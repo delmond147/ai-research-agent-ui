@@ -24,7 +24,7 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onGenerate }) => {
 
   return (
     <div className="h-screen flex flex-col items-center justify-center px-6 bg-bg-primary text-text-primary">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -78,7 +78,7 @@ const LandingScreen: React.FC<LandingScreenProps> = ({ onGenerate }) => {
         </div>
 
         <footer className="pt-12 text-xs text-text-muted font-medium tracking-wider">
-          POWERED BY GEMINI + TAVILY
+          BUILT BY DELMOND BONGHA
         </footer>
       </motion.div>
     </div>
