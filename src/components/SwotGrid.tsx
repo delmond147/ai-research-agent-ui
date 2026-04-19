@@ -23,7 +23,7 @@ const SwotGrid = React.memo(({ swot }: SwotGridProps) => {
         <div key={cat.label} className="card p-6 space-y-4" style={{ backgroundColor: cat.bg, borderTop: `4px solid ${cat.color}` }}>
           <h3 className="text-sm font-semibold tracking-widest uppercase" style={{ color: cat.color }}>{cat.label}</h3>
           <ul className="space-y-2" style={{ listStyle: 'none' }}>
-            {swot[cat.key].map((item, i) => (
+            {(swot?.[cat.key] || []).map((item: string, i: number) => (
               <li key={i} className="text-sm text-text-primary flex space-x-2">
                 <span style={{ color: cat.color }}>•</span>
                 <span>{item}</span>

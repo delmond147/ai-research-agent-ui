@@ -82,9 +82,9 @@ export const ChartRenderer = React.memo(({ type, data }: ChartProps) => {
   };
 
   const chartData = {
-    labels: data.labels || data.map((d: any) => d.label),
-    datasets: data.datasets || [{
-      data: data.map((d: any) => d.value),
+    labels: data?.labels || (Array.isArray(data) ? data.map((d: any) => d.label) : []),
+    datasets: data?.datasets || [{
+      data: Array.isArray(data) ? data.map((d: any) => d.value) : [],
       backgroundColor: [
         '#378ADD',
         '#1D9E75',

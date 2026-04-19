@@ -171,7 +171,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
             {/* Section 1 - Executive Summary */}
             <section id="executive_summary" className="scroll-mt-12 space-y-6">
               <div className="pl-6 border-l-4 border-accent bg-surface/50 p-8 rounded-r-xl">
-                <p className="text-lg leading-relaxed text-text-primary">{data.report.executive_summary}</p>
+                <p className="text-lg leading-relaxed text-text-primary">{data.report?.executive_summary || 'No executive summary available.'}</p>
               </div>
             </section>
 
@@ -179,7 +179,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
             <section id="overview" className="scroll-mt-12 space-y-8">
               <h2 className="text-2xl font-medium tracking-tight" style={{ paddingBottom: '16px', borderBottom: '0.5px solid var(--border-color)' }}>Market Overview</h2>
               <div className="text-text-muted" style={{ lineHeight: '1.6', fontSize: '0.925rem' }}>
-                {data.report.overview}
+                {data.report?.overview || 'No market overview available.'}
               </div>
             </section>
 
@@ -187,11 +187,11 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
             <section id="target_market" className="scroll-mt-12 space-y-8">
               <h2 className="text-2xl font-medium tracking-tight border-b-[0.5px] border-border-color pb-4">Target Market & Customers</h2>
               <div className="prose prose-sm text-text-muted leading-relaxed max-w-none">
-                {data.report.target_market}
+                {data.report?.target_market || 'No target market information available.'}
               </div>
               <div className="bg-surface border-[0.5px] border-border-color p-8 rounded-xl" style={{ height: '280px', position: 'relative', overflow: 'hidden' }}>
                 <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Audience Segmentation (%)</div>
-                <ChartRenderer type="bar" data={data.charts.audience_segments} />
+                <ChartRenderer type="bar" data={data.charts?.audience_segments || []} />
               </div>
             </section>
 
@@ -199,17 +199,17 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
             <section id="competitors" className="scroll-mt-12 space-y-8">
               <h2 className="text-2xl font-medium tracking-tight border-b-[0.5px] border-border-color pb-4">Competitive Landscape</h2>
               <div className="prose prose-sm text-text-muted leading-relaxed max-w-none">
-                {data.report.competitors}
+                {data.report?.competitors || 'No competitive analysis available.'}
               </div>
               <div className="grid lg:grid-cols-2 gap-8">
                 <div className="bg-surface border-[0.5px] border-border-color p-8 rounded-xl" style={{ height: '320px', position: 'relative', overflow: 'hidden' }}>
                   <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Competitive Positioning Strategy</div>
-                  <ChartRenderer type="radar" data={data.charts.competitive_radar} />
+                  <ChartRenderer type="radar" data={data.charts?.competitive_radar || { labels: [], datasets: [] }} />
                 </div>
                 <div className="bg-surface card p-8 space-y-4">
                   <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold">Strategic Landscape Summary</div>
                   <div className="text-sm text-text-muted leading-relaxed prose prose-sm max-w-none">
-                    {data.report.competitors}
+                    {data.report?.competitors || 'Summarized competitive data is currently unavailable.'}
                   </div>
                 </div>
               </div>
@@ -219,11 +219,11 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
             <section id="trends" className="scroll-mt-12 space-y-8">
               <h2 className="text-2xl font-medium tracking-tight border-b-[0.5px] border-border-color pb-4">Market Trends</h2>
               <div className="prose prose-sm text-text-muted leading-relaxed max-w-none">
-                {data.report.trends}
+                {data.report?.trends || 'No market trend data available.'}
               </div>
               <div className="bg-surface border-[0.5px] border-border-color p-8 rounded-xl" style={{ height: '260px', position: 'relative', overflow: 'hidden' }}>
                 <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Market Trajectory (Relative Growth)</div>
-                <ChartRenderer type="line" data={data.charts.trend_lines} />
+                <ChartRenderer type="line" data={data.charts?.trend_lines || { labels: [], datasets: [] }} />
               </div>
             </section>
 
@@ -231,11 +231,11 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
             <section id="business_model" className="scroll-mt-12 space-y-8">
               <h2 className="text-2xl font-medium tracking-tight border-b-[0.5px] border-border-color pb-4">Business Model & Pricing</h2>
               <div className="prose prose-sm text-text-muted leading-relaxed max-w-none">
-                {data.report.business_model}
+                {data.report?.business_model || 'No business model analysis available.'}
               </div>
               <div className="bg-surface border-[0.5px] border-border-color p-8 rounded-xl" style={{ height: '220px', position: 'relative', overflow: 'hidden' }}>
                 <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Revenue Breakdown</div>
-                <ChartRenderer type="donut" data={data.charts.revenue_breakdown} />
+                <ChartRenderer type="donut" data={data.charts?.revenue_breakdown || []} />
               </div>
             </section>
 
@@ -243,7 +243,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
             <div className="html2pdf__page-break"></div>
             <section id="swot" className="scroll-mt-12 space-y-8">
               <h2 className="text-2xl font-medium tracking-tight border-b-[0.5px] border-border-color pb-4">SWOT Analysis</h2>
-              <SwotGrid swot={data.report.swot} />
+              <SwotGrid swot={data.report?.swot || { strengths: [], weaknesses: [], opportunities: [], threats: [] }} />
             </section>
 
             {/* Section 8 - Key Takeaways */}
@@ -251,7 +251,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
             <section id="key_takeaways" className="scroll-mt-12 space-y-8">
               <h2 className="text-2xl font-medium tracking-tight border-b-[0.5px] border-border-color pb-4">Strategic Key Takeaways</h2>
               <div className="grid gap-6">
-                {(data.report.key_takeaways.split(/[•\-\n\.]/).filter(t => t.trim().length > 10)).slice(0, 4).map((text, i) => (
+                {(data.report?.key_takeaways || "").split(/[•\-\n\.]/).filter(t => t.trim().length > 10).slice(0, 4).map((text, i) => (
                   <div key={i} className="flex space-x-6 bg-surface border-[0.5px] border-border-color p-8 rounded-xl group hover:border-text-muted transition-all">
                     <div className="flex-shrink-0 w-12 h-12 rounded-full border-[0.5px] border-border-color flex items-center justify-center text-xl font-medium group-hover:bg-accent group-hover:text-white transition-all">
                       {i + 1}
