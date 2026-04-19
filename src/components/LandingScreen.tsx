@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { researchService } from '../services/researchService';
 
 interface LandingScreenProps {
   onGenerate: (topic: string) => void;
@@ -14,6 +15,11 @@ const EXAMPLES = [
 
 const LandingScreen: React.FC<LandingScreenProps> = ({ onGenerate }) => {
   const [input, setInput] = useState('');
+
+  useEffect(() => {
+    // Proactively ping the backend to wake up the Render free tier
+    researchService.ping();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

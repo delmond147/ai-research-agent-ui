@@ -59,20 +59,48 @@ export interface ResearchResponse {
 }
 
 export const researchService = {
-  async generateReport(topic: string): Promise<ResearchResponse> {
-    const response = await fetch(`${API_BASE_URL}/api/research`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ topic }),
-    });
+  /**
+   * Pings the backend to wake it up (Render cold-start mitigation)
+   */
+  async ping(): Promise<void> {
+    try {
+      await fetch(`${API_BASE_URL}/docs`, { mode: 'no-cors' });
+    } catch (e) {
+      // Ignore errors for ping
+    }
+  },
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.detail || 'Failed to generate report. Please try again.');
+  async generateReport(topic: string, retries = 3): Promise<ResearchResponse> {
+    let lastError: any;
+    
+    for (let i = 0; i < retries; i++) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/research`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ topic }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.detail || 'Failed to generate report. Please try again.');
+        }
+
+        return await response.json();
+      } catch (error: any) {
+        lastError = error;
+        // If it's a fetch error (like "Failed to fetch"), wait and retry
+        if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
+          console.log(`Rate limit or cold start hit. Retrying attempt ${i + 1}/${retries}...`);
+          await new Promise(res => setTimeout(res, 2000 * (i + 1))); // Exponential-ish backoff
+          continue;
+        }
+        throw error; // If it's a specific API error, throw it
+      }
     }
 
-    return response.json();
+    throw lastError || new Error('Maximum retries reached. Backend might be down.');
   },
 };
