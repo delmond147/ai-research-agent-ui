@@ -189,7 +189,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
               <div className="prose prose-sm text-text-muted leading-relaxed max-w-none">
                 {data.report.target_market}
               </div>
-              <div className="bg-surface border-[0.5px] border-border-color p-8 rounded-xl" style={{ height: '220px', position: 'relative', overflow: 'hidden' }}>
+              <div className="bg-surface border-[0.5px] border-border-color p-8 rounded-xl" style={{ height: '280px', position: 'relative', overflow: 'hidden' }}>
                 <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Audience Segmentation (%)</div>
                 <ChartRenderer type="bar" data={data.charts.audience_segments} />
               </div>
