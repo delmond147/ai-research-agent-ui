@@ -9,7 +9,7 @@ interface SwotGridProps {
   };
 }
 
-const SwotGrid: React.FC<SwotGridProps> = ({ swot }) => {
+const SwotGrid = React.memo(({ swot }: SwotGridProps) => {
   const categories = [
     { key: 'strengths', label: 'Strengths', color: 'var(--chart-2)', bg: '#ECFDF5' },
     { key: 'weaknesses', label: 'Weaknesses', color: 'var(--chart-3)', bg: '#FEF2F2' },
@@ -34,6 +34,6 @@ const SwotGrid: React.FC<SwotGridProps> = ({ swot }) => {
       ))}
     </div>
   );
-};
+});
 
 export default SwotGrid;

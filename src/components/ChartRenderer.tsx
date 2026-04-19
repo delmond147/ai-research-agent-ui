@@ -34,7 +34,7 @@ interface ChartProps {
   data: any;
 }
 
-export const ChartRenderer: React.FC<ChartProps> = ({ type, data }) => {
+export const ChartRenderer = React.memo(({ type, data }: ChartProps) => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -105,4 +105,4 @@ export const ChartRenderer: React.FC<ChartProps> = ({ type, data }) => {
     case 'donut': return <Doughnut data={chartData} options={options as any} />;
     default: return null;
   }
-};
+});

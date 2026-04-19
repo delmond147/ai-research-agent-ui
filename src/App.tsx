@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import LandingScreen from './components/LandingScreen';
-import LoadingScreen from './components/LoadingScreen';
-import ReportScreen from './components/ReportScreen';
-import { researchService } from './services/researchService';
-import type { ResearchResponse } from './services/researchService';
+import LandingScreen from './components/LandingScreen.tsx';
+import LoadingScreen from './components/LoadingScreen.tsx';
+import ReportScreen from './components/ReportScreen.tsx';
+import { researchService } from './services/researchService.ts';
+import type { ResearchResponse } from './services/researchService.ts';
 import { Moon, Sun } from 'lucide-react';
 
 type Screen = 'landing' | 'loading' | 'report';

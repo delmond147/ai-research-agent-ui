@@ -70,7 +70,8 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
     <div className="flex bg-bg-primary min-h-screen">
       {/* Sidebar TOC - Desktop Only */}
       <aside className="fixed h-full bg-surface p-8 overflow-y-auto z-10" style={{ width: '220px', borderRight: '0.5px solid var(--border-color)', display: 'none' }}>
-        <style dangerouslySetInnerHTML={{ __html: `
+        <style dangerouslySetInnerHTML={{
+          __html: `
           @media (min-width: 1024px) {
             aside { display: block !important; }
           }
@@ -81,19 +82,21 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
             <span>NEW RESEARCH</span>
           </button>
           <div className="text-xs uppercase tracking-widest text-text-muted font-semibold" style={{ fontSize: '10px', marginBottom: '16px' }}>Table of Contents</div>
-          <nav className="space-y-4">
+          <nav className="space-y-6">
             {SECTIONS.map((section) => (
               <a
                 key={section.id}
                 href={`#${section.id}`}
                 className="block text-sm transition-all"
-                style={{ 
+                style={{
                   fontSize: '13px',
+                  lineHeight: '1.5',
                   textDecoration: 'none',
                   color: activeSection === section.id ? 'var(--text-primary)' : 'var(--text-muted)',
-                  fontWeight: activeSection === section.id ? '500' : '400',
-                  paddingLeft: activeSection === section.id ? '8px' : '0',
-                  borderLeft: activeSection === section.id ? '2px solid var(--accent)' : 'none'
+                  fontWeight: activeSection === section.id ? '600' : '450',
+                  paddingLeft: activeSection === section.id ? '12px' : '0',
+                  borderLeft: activeSection === section.id ? '2px solid var(--accent)' : 'none',
+                  opacity: activeSection === section.id ? 1 : 0.8
                 }}
               >
                 {section.label}
@@ -105,7 +108,8 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
 
       {/* Main Content */}
       <main className="flex-1 py-12 px-6" style={{ marginLeft: window.innerWidth >= 1024 ? '220px' : '0' }}>
-        <style dangerouslySetInnerHTML={{ __html: `
+        <style dangerouslySetInnerHTML={{
+          __html: `
           @media (min-width: 1024px) {
             main { margin-left: 220px !important; padding-left: 48px !important; padding-right: 48px !important; }
           }
@@ -118,9 +122,9 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
                 <div className="flex items-center space-x-2 text-text-muted text-xs uppercase tracking-widest">
                   <span>Intelligence Report</span>
                   <span>/</span>
-                  <span className="font-medium text-text-primary">{data.topic}</span>
+                  <span className="font-medium text-text-primary" style={{ textTransform: 'capitalize' }}>{data.topic}</span>
                 </div>
-                <h1 className="text-4xl md:text-5xl font-medium tracking-tight text-text-primary">{data.topic} Market Analysis</h1>
+                <h1 className="text-4xl md:text-5xl font-medium tracking-tight text-text-primary" style={{ textTransform: 'capitalize' }}>{data.topic} Market Analysis</h1>
                 <div className="flex flex-wrap items-center gap-4 text-xs text-text-muted font-medium">
                   <span className="bg-surface card" style={{ padding: '4px 8px' }}>ID: {Math.random().toString(36).substr(2, 9).toUpperCase()}</span>
                   <span>•</span>
@@ -130,7 +134,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
                 </div>
               </div>
               <div className="flex items-center space-x-3 no-print">
-                <button 
+                <button
                   onClick={handleDownloadPDF}
                   className="flex items-center space-x-2 bg-surface card text-sm font-medium transition-all"
                   style={{ padding: '10px 16px', cursor: 'pointer' }}
@@ -138,7 +142,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
                   <Download size={16} />
                   <span>Download PDF</span>
                 </button>
-                <button 
+                <button
                   onClick={copyLink}
                   className="bg-surface card transition-all"
                   style={{ padding: '10px', cursor: 'pointer' }}
@@ -186,7 +190,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
               <div className="prose prose-sm text-text-muted leading-relaxed max-w-none">
                 {data.report.target_market}
               </div>
-              <div className="h-[300px] w-full bg-surface border-[0.5px] border-border-color p-8 rounded-xl">
+              <div className="h-[200px] w-full bg-surface border-[0.5px] border-border-color p-8 rounded-xl relative overflow-hidden">
                 <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Audience Segmentation (%)</div>
                 <ChartRenderer type="bar" data={data.charts.audience_segments} />
               </div>
@@ -199,7 +203,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
                 {data.report.competitors}
               </div>
               <div className="grid lg:grid-cols-2 gap-8">
-                <div className="h-[350px] bg-surface border-[0.5px] border-border-color p-8 rounded-xl">
+                <div className="h-[240px] bg-surface border-[0.5px] border-border-color p-8 rounded-xl relative overflow-hidden">
                   <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Market Positioning</div>
                   <ChartRenderer type="radar" data={data.charts.competitive_radar} />
                 </div>
@@ -215,7 +219,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
                     <tbody className="text-text-muted">
                       {['Market Leader', 'Aggressive Challenger', 'Niche Player'].map((_, i) => (
                         <tr key={i} style={{ borderBottom: '0.5px solid var(--border-color)' }}>
-                          <td className="p-4 font-medium text-text-primary">Competitor {i+1}</td>
+                          <td className="p-4 font-medium text-text-primary">Competitor {i + 1}</td>
                           <td className="p-4">Brand Presence</td>
                           <td className="p-4">Innovation Lag</td>
                         </tr>
@@ -232,7 +236,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
               <div className="prose prose-sm text-text-muted leading-relaxed max-w-none">
                 {data.report.trends}
               </div>
-              <div className="h-[350px] w-full bg-surface border-[0.5px] border-border-color p-8 rounded-xl">
+              <div className="h-[240px] w-full bg-surface border-[0.5px] border-border-color p-8 rounded-xl relative overflow-hidden">
                 <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Market Trajectory (Relative Growth)</div>
                 <ChartRenderer type="line" data={data.charts.trend_lines} />
               </div>
@@ -244,7 +248,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
               <div className="prose prose-sm text-text-muted leading-relaxed max-w-none">
                 {data.report.business_model}
               </div>
-              <div className="h-[300px] w-full bg-surface border-[0.5px] border-border-color p-8 rounded-xl">
+              <div className="h-[200px] w-full bg-surface border-[0.5px] border-border-color p-8 rounded-xl relative overflow-hidden">
                 <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Revenue Breakdown</div>
                 <ChartRenderer type="donut" data={data.charts.revenue_breakdown} />
               </div>
