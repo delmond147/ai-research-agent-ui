@@ -27,15 +27,19 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
   const reportRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    let timeoutId: number;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
+            // Use a simple check to avoid state spam
+            if (activeSection !== entry.target.id) {
+              setActiveSection(entry.target.id);
+            }
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.3 } // Lower threshold for smoother perception
     );
 
     SECTIONS.forEach((section) => {
@@ -95,8 +99,9 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
               <a
                 key={section.id}
                 href={`#${section.id}`}
-                className="block text-sm transition-all"
+                className="text-sm transition-all"
                 style={{
+                  display: 'block',
                   fontSize: '13px',
                   lineHeight: '1.5',
                   textDecoration: 'none',
@@ -104,7 +109,8 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
                   fontWeight: activeSection === section.id ? '600' : '450',
                   paddingLeft: activeSection === section.id ? '12px' : '0',
                   borderLeft: activeSection === section.id ? '2px solid var(--accent)' : 'none',
-                  opacity: activeSection === section.id ? 1 : 0.8
+                  opacity: activeSection === section.id ? 1 : 0.8,
+                  marginBottom: '16px'
                 }}
               >
                 {section.label}
@@ -198,7 +204,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
               <div className="prose prose-sm text-text-muted leading-relaxed max-w-none">
                 {data.report.target_market}
               </div>
-              <div className="h-[200px] w-full bg-surface border-[0.5px] border-border-color p-8 rounded-xl relative overflow-hidden">
+              <div className="bg-surface border-[0.5px] border-border-color p-8 rounded-xl" style={{ height: '220px', position: 'relative', overflow: 'hidden' }}>
                 <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Audience Segmentation (%)</div>
                 <ChartRenderer type="bar" data={data.charts.audience_segments} />
               </div>
@@ -211,7 +217,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
                 {data.report.competitors}
               </div>
               <div className="grid lg:grid-cols-2 gap-8">
-                <div className="h-[240px] bg-surface border-[0.5px] border-border-color p-8 rounded-xl relative overflow-hidden">
+                <div className="bg-surface border-[0.5px] border-border-color p-8 rounded-xl" style={{ height: '260px', position: 'relative', overflow: 'hidden' }}>
                   <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Market Positioning</div>
                   <ChartRenderer type="radar" data={data.charts.competitive_radar} />
                 </div>
@@ -244,7 +250,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
               <div className="prose prose-sm text-text-muted leading-relaxed max-w-none">
                 {data.report.trends}
               </div>
-              <div className="h-[240px] w-full bg-surface border-[0.5px] border-border-color p-8 rounded-xl relative overflow-hidden">
+              <div className="bg-surface border-[0.5px] border-border-color p-8 rounded-xl" style={{ height: '260px', position: 'relative', overflow: 'hidden' }}>
                 <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Market Trajectory (Relative Growth)</div>
                 <ChartRenderer type="line" data={data.charts.trend_lines} />
               </div>
@@ -256,7 +262,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
               <div className="prose prose-sm text-text-muted leading-relaxed max-w-none">
                 {data.report.business_model}
               </div>
-              <div className="h-[200px] w-full bg-surface border-[0.5px] border-border-color p-8 rounded-xl relative overflow-hidden">
+              <div className="bg-surface border-[0.5px] border-border-color p-8 rounded-xl" style={{ height: '220px', position: 'relative', overflow: 'hidden' }}>
                 <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-6">Revenue Breakdown</div>
                 <ChartRenderer type="donut" data={data.charts.revenue_breakdown} />
               </div>
