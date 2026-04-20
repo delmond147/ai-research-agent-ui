@@ -297,6 +297,22 @@ body {
 }
 .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
 
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, 
+    var(--border-color) 25%, 
+    var(--bg-primary) 50%, 
+    var(--border-color) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  opacity: 0.5;
+}
+
 .h-\[200px\] { height: 200px; }
 .h-\[250px\] { height: 250px; }
 
