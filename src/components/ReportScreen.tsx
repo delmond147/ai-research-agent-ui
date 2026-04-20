@@ -148,25 +148,26 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
               <span className="text-[10px] uppercase tracking-wider font-medium">{data.sources_count || 0} Sources Verified</span>
             </div>
           </div>
+
+          {/* Sidebar Footer: Actions (moved into scroll area) */}
+          <div className="px-4 pt-8 space-y-3">
+            <button 
+              onClick={handleDownloadPDF}
+              className="w-full flex items-center justify-center space-x-2 button-primary py-3 text-xs font-bold uppercase tracking-wider"
+            >
+              <Download size={14} />
+              <span>Export Report</span>
+            </button>
+            <button 
+              onClick={copyLink}
+              className="w-full flex items-center justify-center space-x-2 py-3 text-xs font-bold uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors border border-border-color rounded-lg hover:bg-surface"
+            >
+              <Share2 size={14} />
+              <span>Share Link</span>
+            </button>
+          </div>
         </div>
 
-        {/* Sidebar Footer: Actions */}
-        <div className="p-6 border-t border-border-color space-y-3">
-          <button 
-            onClick={handleDownloadPDF}
-            className="w-full flex items-center justify-center space-x-2 button-primary py-3 text-xs font-bold uppercase tracking-wider"
-          >
-            <Download size={14} />
-            <span>Export Report</span>
-          </button>
-          <button 
-            onClick={copyLink}
-            className="w-full flex items-center justify-center space-x-2 py-3 text-xs font-bold uppercase tracking-wider text-text-muted hover:text-text-primary transition-colors border border-border-color rounded-lg hover:bg-surface"
-          >
-            <Share2 size={14} />
-            <span>Share Link</span>
-          </button>
-        </div>
       </aside>
 
       {/* Main Content Area */}
@@ -186,8 +187,8 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
         <div className="max-w-5xl mx-auto px-6 py-8 lg:px-20 lg:py-16">
           <article ref={reportRef} className="space-y-16 bg-transparent animate-fade-in">
             {/* Report Header */}
-            <header className="space-y-10 border-b border-border-color/20 pb-16">
-              <div className="space-y-4">
+            <header className="space-y-4 border-b border-border-color/20 pb-6">
+              <div className="space-y-2">
                 <nav className="flex items-center space-x-2 text-[10px] font-bold uppercase tracking-[0.3em] text-text-muted opacity-60">
                   <span>Market Insight</span>
                   <span className="opacity-30">/</span>
