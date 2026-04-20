@@ -105,9 +105,9 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
 
           <button 
             onClick={onReset} 
-            className="group flex items-center space-x-2 text-[10px] font-bold text-text-muted hover:text-accent transition-all uppercase tracking-widest border-none bg-none cursor-pointer p-0"
+            className="btn-slick-glass flex items-center space-x-2 mt-2"
           >
-            <ArrowLeft size={12} className="group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft size={10} />
             <span>New Research</span>
           </button>
         </div>
@@ -193,7 +193,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
                   <span className="opacity-30">/</span>
                   <span className="text-accent">Strategic Analysis</span>
                 </nav>
-                <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-text-primary leading-[1.05]">
+                <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-text-primary leading-tight">
                   {data.topic}
                 </h1>
               </div>
@@ -202,33 +202,33 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
           <div className="space-y-16">
             {/* Executive Summary as a Premium Callout */}
             <section id="executive_summary" className="scroll-mt-12">
-               <div className="bg-accent/10 border-l-4 border-accent p-10 rounded-r-2xl glass">
-                <p className="text-xl leading-relaxed text-text-primary italic font-medium">
+               <div className="bg-accent/5 border-l-4 border-accent p-12 rounded-r-2xl glass">
+                <p className="text-lg leading-relaxed text-text-primary italic font-medium opacity-90">
                   "{data.report?.executive_summary}"
                 </p>
               </div>
             </section>
 
             <section id="overview" className="scroll-mt-12 space-y-8">
-              <h2 className="text-2xl font-bold text-text-primary border-b border-border-color pb-4">Market Overview</h2>
-              <p className="text-text-muted text-lg leading-relaxed">{data.report?.overview}</p>
+              <h2 className="text-xl font-bold text-text-primary border-b border-border-color/20 pb-4">Market Overview</h2>
+              <p className="text-text-muted text-base leading-relaxed">{data.report?.overview}</p>
             </section>
 
             <section id="target_market" className="scroll-mt-12 space-y-10">
               <div className="space-y-4">
-                <h2 className="text-2xl font-bold text-text-primary border-b border-border-color pb-4">Target Audience</h2>
-                <p className="text-text-muted leading-relaxed">{data.report?.target_market}</p>
+                <h2 className="text-xl font-bold text-text-primary border-b border-border-color/20 pb-4">Target Audience</h2>
+                <p className="text-text-muted text-base leading-relaxed">{data.report?.target_market}</p>
               </div>
-              <div className="bg-surface border border-border-color p-8 rounded-2xl glass shadow-sm h-[250px] relative overflow-hidden">
+              <div className="bg-surface border border-border-color/20 p-8 rounded-2xl glass shadow-sm h-[200px] relative overflow-hidden">
                 <div className="text-[10px] uppercase font-bold tracking-widest text-text-muted mb-4">Market Segmentation Analysis</div>
                 <ChartRenderer type="bar" data={data.charts?.audience_segments || []} />
               </div>
             </section>
 
             <section id="competitors" className="scroll-mt-12 space-y-10">
-              <h2 className="text-2xl font-bold text-text-primary border-b border-border-color pb-4">Strategic Landscape</h2>
+              <h2 className="text-xl font-bold text-text-primary border-b border-border-color/20 pb-4">Strategic Landscape</h2>
               <div className="grid lg:grid-cols-2 gap-10">
-                <div className="bg-surface border border-border-color p-8 rounded-2xl glass shadow-sm h-[250px] relative overflow-hidden">
+                <div className="bg-surface border border-border-color/20 p-8 rounded-2xl glass shadow-sm h-[200px] relative overflow-hidden">
                   <div className="text-[10px] uppercase font-bold tracking-widest text-text-muted mb-4">Competitive Positioning Radar</div>
                   <ChartRenderer type="radar" data={data.charts?.competitive_radar || { labels: [], datasets: [] }} />
                 </div>
@@ -241,20 +241,20 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
 
             <section id="trends" className="scroll-mt-12 space-y-10">
               <div className="space-y-4">
-                <h2 className="text-2xl font-bold text-text-primary border-b border-border-color pb-4">Growth Trajectory</h2>
-                <p className="text-text-muted leading-relaxed">{data.report?.trends}</p>
+                <h2 className="text-xl font-bold text-text-primary border-b border-border-color/20 pb-4">Growth Trajectory</h2>
+                <p className="text-text-muted text-base leading-relaxed">{data.report?.trends}</p>
               </div>
-              <div className="bg-surface border border-border-color p-8 rounded-2xl glass shadow-sm h-[220px] relative overflow-hidden">
+              <div className="bg-surface border border-border-color/20 p-8 rounded-2xl glass shadow-sm h-[200px] relative overflow-hidden">
                 <div className="text-[10px] uppercase font-bold tracking-widest text-text-muted mb-4">Sector Momentum Score</div>
                 <ChartRenderer type="line" data={data.charts?.trend_lines || { labels: [], datasets: [] }} />
               </div>
             </section>
 
             <section id="business_model" className="scroll-mt-12 space-y-10">
-              <h2 className="text-2xl font-bold text-text-primary border-b border-border-color pb-4">Business & Revenue</h2>
+              <h2 className="text-xl font-bold text-text-primary border-b border-border-color/20 pb-4">Business & Revenue</h2>
               <div className="grid lg:grid-cols-2 gap-10 items-start">
-                <p className="text-text-muted leading-relaxed">{data.report?.business_model}</p>
-                <div className="bg-surface border border-border-color p-8 rounded-2xl glass shadow-sm h-[220px] relative overflow-hidden">
+                <p className="text-text-muted text-base leading-relaxed">{data.report?.business_model}</p>
+                <div className="bg-surface border border-border-color/20 p-8 rounded-2xl glass shadow-sm h-[200px] relative overflow-hidden">
                   <div className="text-[10px] uppercase font-bold tracking-widest text-text-muted mb-4">Revenue Streams Breakdown</div>
                   <ChartRenderer type="donut" data={data.charts?.revenue_breakdown || []} />
                 </div>
@@ -262,12 +262,12 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
             </section>
 
             <section id="swot" className="scroll-mt-12 space-y-10">
-              <h2 className="text-2xl font-bold text-text-primary border-b border-border-color pb-4">SWOT Analysis</h2>
+              <h2 className="text-xl font-bold text-text-primary border-b border-border-color/20 pb-4">SWOT Analysis</h2>
               <SwotGrid swot={data.report?.swot || { strengths: [], weaknesses: [], opportunities: [], threats: [] }} />
             </section>
 
             <section id="key_takeaways" className="scroll-mt-12 space-y-10">
-              <h2 className="text-2xl font-bold text-text-primary border-b border-border-color pb-4">Strategic Key Takeaways</h2>
+              <h2 className="text-xl font-bold text-text-primary border-b border-border-color/20 pb-4">Strategic Key Takeaways</h2>
               <div className="grid md:grid-cols-2 gap-6">
                 {(() => {
                   const raw = data.report?.key_takeaways;
