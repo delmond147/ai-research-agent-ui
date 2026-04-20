@@ -113,7 +113,7 @@ const ReportScreen: React.FC<ReportScreenProps> = ({ data, onReset }) => {
         </div>
 
         {/* Sidebar Content: Navigation & Info */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-8">
+        <div className="flex-1 overflow-y-auto p-6 pb-12 space-y-8 min-h-0">
           <div>
             <div className="px-4 mb-4">
               <span className="text-[10px] uppercase tracking-[0.2em] text-text-muted font-bold opacity-40">Active Analysis</span>

@@ -45,7 +45,7 @@ export const ChartRenderer = React.memo(({ type, data }: ChartProps) => {
         labels: {
           padding: 20,
           usePointStyle: true,
-          font: { family: 'Inter', size: 12 },
+          font: { family: 'Poppins', size: 12 },
           color: 'var(--text-muted)',
         },
       },
@@ -62,40 +62,54 @@ export const ChartRenderer = React.memo(({ type, data }: ChartProps) => {
     scales: type === 'bar' ? {
       x: {
         grid: { display: false },
-        ticks: { color: 'var(--text-muted)' }
+        ticks: { color: 'var(--text-muted)', font: { family: 'Poppins' } }
       },
       y: {
         grid: { color: 'var(--border-color)', borderDash: [2, 2] as number[] },
-        ticks: { color: 'var(--text-muted)' }
+        ticks: { color: 'var(--text-muted)', font: { family: 'Poppins' } }
       }
     } : type === 'radar' ? {
       r: {
         angleLines: { color: 'var(--border-color)' },
         grid: { color: 'var(--border-color)' },
-        pointLabels: { color: 'var(--text-muted)', font: { size: 11 } },
+        pointLabels: { color: 'var(--text-muted)', font: { size: 11, family: 'Poppins' } },
         ticks: { display: false }
       }
     } : type === 'line' ? {
-      x: { grid: { display: false }, ticks: { color: 'var(--text-muted)' } },
-      y: { grid: { color: 'var(--border-color)', borderDash: [2, 2] }, ticks: { color: 'var(--text-muted)' } }
+      x: { grid: { display: false }, ticks: { color: 'var(--text-muted)', font: { family: 'Poppins' } } },
+      y: { grid: { color: 'var(--border-color)', borderDash: [2, 2] }, ticks: { color: 'var(--text-muted)', font: { family: 'Poppins' } } }
     } : undefined,
   };
 
+  // Robust data sanitization
+  const safeLabels = (data?.labels || (Array.isArray(data) ? data.map((d: any) => d?.label) : []))
+    .map((l: any) => l || 'Category');
+    
+  const safeDatasets = data?.datasets 
+    ? data.datasets.map((ds: any, i: number) => ({
+        ...ds,
+        label: ds.label || `Dataset ${i + 1}`,
+        data: ds.data || [],
+        backgroundColor: ds.backgroundColor || [
+          '#378ADD', '#1D9E75', '#D85A30', '#7F77DD', '#BA7517'
+        ][i % 5],
+        borderColor: ds.borderColor || 'transparent',
+        borderWidth: ds.borderWidth || 0,
+      }))
+    : [{
+        label: 'Analysis Data',
+        data: Array.isArray(data) ? data.map((d: any) => d?.value || 0) : [],
+        backgroundColor: [
+          '#378ADD', '#1D9E75', '#D85A30', '#7F77DD', '#BA7517'
+        ],
+        borderColor: 'transparent',
+        borderWidth: 0,
+        borderRadius: type === 'bar' ? 4 : 0,
+      }];
+
   const chartData = {
-    labels: data?.labels || (Array.isArray(data) ? data.map((d: any) => d.label) : []),
-    datasets: data?.datasets || [{
-      data: Array.isArray(data) ? data.map((d: any) => d.value) : [],
-      backgroundColor: [
-        '#378ADD',
-        '#1D9E75',
-        '#D85A30',
-        '#7F77DD',
-        '#BA7517'
-      ],
-      borderColor: 'transparent',
-      borderWidth: 0,
-      borderRadius: type === 'bar' ? 4 : 0,
-    }],
+    labels: safeLabels,
+    datasets: safeDatasets,
   };
 
   switch (type) {
